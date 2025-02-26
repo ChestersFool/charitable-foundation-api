@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-77(6btrf^ys#dvuzvro=v*^^g$hzlc=fj&#p0t$o$f955%23c*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '6561-91-235-227-25.ngrok-free.app',
+]
 
 
 # Application definition
@@ -37,17 +41,40 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Django REST Framework
+    'rest_framework',
+
+    # CORS
+    "corsheaders",
+
+    'news.apps.NewsConfig',
+    'user.apps.UserConfig',
+    'event.apps.EventConfig',
+    'help_requests.apps.HelpRequestsConfig',
+    'user_event.apps.UserEventConfig',
+    'volunteer_application.apps.VolunteerApplicationConfig',
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # Якщо React працює локально
+#     "https://yourfrontend.com",  # Якщо є продакшн-версія
+# ]
+
+# АБО, якщо хочеш дозволити всі джерела (НЕБЕЗПЕЧНО для продакшну)
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'cfAPI.urls'
 
@@ -121,3 +148,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",  # Або `IsAuthenticated`, якщо потрібен логін
+    ],
+}
